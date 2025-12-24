@@ -78,23 +78,23 @@
             </li>
 
             <!-- Staff -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link">
+            <li class="menu-item {{ request()->routeIs('staff') ? 'active' : '' }}">
+              <a href="{{ route('staff') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Layouts">Staff</div>
               </a>
             </li>
 
             <!-- Guest -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link">
+            <li class="menu-item {{ request()->routeIs('guest') ? 'active' : '' }}">
+              <a href="{{ route('guest') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div data-i18n="Layouts">Guest</div>
               </a>
             </li>
 
             <!-- Room -->
-            <li class="menu-item {{ request()->routeIs('room*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('room') ? 'active' : '' }}">
                 <a href="{{ route('room') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-door-open"></i>
                 <div>Room</div>
@@ -102,7 +102,7 @@
             </li>
 
             <!-- Property -->
-            <li class="menu-item {{ request()->routeIs('property*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('property') ? 'active' : '' }}">
                 <a href="{{ route('property') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-tv"></i>
                 <div>Property</div>

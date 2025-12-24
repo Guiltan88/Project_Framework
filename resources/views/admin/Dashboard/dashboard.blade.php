@@ -387,7 +387,9 @@
                     </tbody>
                   </table>
                 </div>
+
               </div>
+
               <!--/ Striped Rows -->
             <!-- / Content -->
 @endsection
