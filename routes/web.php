@@ -11,7 +11,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 Route::get('property',[PropertyController::class, 'index'])->name('property');
 Route::get('room',[RoomController::class, 'index'])->name('room');
 Route::get('staff',[StaffController::class, 'index'])->name('staff');

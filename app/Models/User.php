@@ -1,142 +1,57 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * Role constant
-     */
-    const ROLE_ADMIN = 'admin';
-    const ROLE_STAFF = 'staff';
-    const ROLE_GUEST = 'guest';
-
-    /**
-     * Fillable fields
-     */
     protected $fillable = [
-        'nama',
+        'role_id',
+        'name',
         'email',
         'password',
-        'role',
-        'fakultas_id',
         'status',
     ];
 
-    /**
-     * Hidden fields
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Cast
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /* =====================================================
-     | RELATIONS (ADMIN FOCUS)
-     ===================================================== */
-
-    /**
-     * Admin dapat menyetujui banyak peminjaman
-     */
-    public function approvedPeminjaman()
+    // RELATIONSHIP
+    public function role()
     {
-        return $this->hasMany(Peminjaman::class, 'approved_by');
+        return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Relasi ke fakultas (opsional)
-     */
-    public function fakultas()
+    public function bookings()
     {
-        return $this->belongsTo(Fakultas::class);
+        return $this->hasMany(Booking::class);
     }
 
-    /* =====================================================
-     | ROLE CHECKERS (ADMIN UTAMA)
-     ===================================================== */
+    public function visits()
+    {
+        return $this->hasMany(Visit::class);
+    }
 
+    // HELPER (sangat berguna)
     public function isAdmin(): bool
     {
-        return $this->role === self::ROLE_ADMIN;
+        return $this->role->name === 'admin';
     }
 
     public function isStaff(): bool
     {
-        return $this->role === self::ROLE_STAFF;
+        return $this->role->name === 'staff';
     }
 
     public function isGuest(): bool
     {
-        return $this->role === self::ROLE_GUEST;
-    }
-
-    /* =====================================================
-     | QUERY SCOPES (ADMIN DASHBOARD)
-     ===================================================== */
-
-    /**
-     * Ambil semua admin aktif
-     */
-    public function scopeAdmin($query)
-    {
-        return $query->where('role', self::ROLE_ADMIN);
-    }
-
-    /**
-     * User aktif saja
-     */
-    public function scopeAktif($query)
-    {
-        return $query->where('status', 'aktif');
-    }
-
-    /* =====================================================
-     | ACCESSORS (ADMIN DISPLAY)
-     ===================================================== */
-
-    /**
-     * Label role untuk badge UI
-     */
-    public function getRoleLabelAttribute()
-    {
-        return match ($this->role) {
-            self::ROLE_ADMIN => 'Administrator',
-            self::ROLE_STAFF => 'Staff',
-            self::ROLE_GUEST => 'Guest',
-            default => 'Unknown',
-        };
-    }
-
-    /**
-     * Warna badge role
-     */
-    public function getRoleBadgeAttribute()
-    {
-        return match ($this->role) {
-            self::ROLE_ADMIN => 'danger',
-            self::ROLE_STAFF => 'primary',
-            self::ROLE_GUEST => 'secondary',
-            default => 'dark',
-        };
-    }
-
-    /**
-     * Status badge
-     */
-    public function getStatusBadgeAttribute()
-    {
-        return $this->status === 'aktif' ? 'success' : 'secondary';
+        return $this->role->name === 'guest';
     }
 }
