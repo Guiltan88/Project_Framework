@@ -8,22 +8,12 @@ return new class extends Migration {
     {
         Schema::create('room_logs', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('booking_id')
-                  ->constrained('bookings')
-                  ->cascadeOnDelete();
-
-            $table->enum('action', [
-                'booked',
-                'returned',
-                'canceled'
-            ]);
-
-            $table->text('description')->nullable();
-            $table->dateTime('action_time');
-
+            $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
+            $table->string('activity');
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
+
     }
 
     public function down(): void

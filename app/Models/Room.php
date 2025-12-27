@@ -10,16 +10,18 @@ class Room extends Model
     use HasFactory;
 
     protected $fillable = [
-        'room_code',
-        'room_name',
-        'capacity',
-        'location',
+        'kode_ruangan',
+        'nama_ruangan',
+        'lokasi',
+        'kapasitas',
+        'fasilitas',
         'status',
+        'gambar',
     ];
 
-    // One room has many bookings
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
 }
+

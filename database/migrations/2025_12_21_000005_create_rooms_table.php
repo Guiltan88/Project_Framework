@@ -9,19 +9,15 @@ return new class extends Migration {
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('room_code', 20)->unique();
-            $table->string('room_name', 100);
-            $table->integer('capacity');
-            $table->string('location', 100);
-
-            $table->enum('status', [
-                'available',
-                'booked',
-                'maintenance'
-            ])->default('available');
-
+            $table->string('kode_ruangan')->unique();
+            $table->string('nama_ruangan');
+            $table->string('lokasi');
+            $table->integer('kapasitas');
+            $table->text('fasilitas')->nullable();
+            $table->enum('status', ['tersedia', 'tidak_tersedia'])->default('tersedia');
             $table->timestamps();
         });
+
     }
 
     public function down(): void

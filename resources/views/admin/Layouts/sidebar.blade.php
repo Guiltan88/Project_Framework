@@ -94,8 +94,8 @@
             </li>
 
             <!-- Room -->
-            <li class="menu-item {{ request()->routeIs('room') ? 'active' : '' }}">
-                <a href="{{ route('room') }}" class="menu-link">
+            <li class="menu-item {{ request()->routeIs('Room.*') ? 'active' : '' }}">
+                <a href="{{ route('Room.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-door-open"></i>
                 <div>Room</div>
                 </a>

@@ -10,31 +10,19 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'room_id',
-        'user_id',
-        'start_time',
-        'end_time',
-        'status',
+        'user_id', 'room_id', 'tanggal',
+        'jam_mulai', 'jam_selesai',
+        'keperluan', 'status', 'approved_by'
     ];
-
-    protected $dates = [
-        'start_time',
-        'end_time',
-    ];
-
-    // RELATIONSHIP
-    public function room()
-    {
-        return $this->belongsTo(Room::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function logs()
+    public function room()
     {
-        return $this->hasMany(RoomLog::class);
+        return $this->belongsTo(Room::class);
     }
 }
+

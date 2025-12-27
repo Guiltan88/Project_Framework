@@ -2,63 +2,109 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar room
      */
     public function index()
     {
-        return view('admin.Room.room');
+        $rooms = Room::latest()->get();
+        return view('admin.Room.index', compact('rooms'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Form tambah room
      */
     public function create()
     {
-        //
+        return view('admin.Room.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode_ruangan' => 'required|unique:rooms',
+            'nama_ruangan' => 'required',
+            'lokasi'       => 'required',
+            'kapasitas'    => 'required|integer',
+            'status'       => 'required',
+            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('rooms', $filename, 'public');
+            $data['gambar'] = $filename;
+        }
+
+        Room::create($data);
+
+        return redirect()
+            ->route('Room.index')
+            ->with('success', 'Room berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+
 
     /**
-     * Show the form for editing the specified resource.
+     * Form edit room
      */
-    public function edit(string $id)
+    public function edit(Room $room)
     {
-        //
+        return view('admin.Room.edit', compact('room'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Room $room)
     {
-        //
+        $request->validate([
+            'kode_ruangan' => 'required|unique:rooms,kode_ruangan,' . $room->id,
+            'nama_ruangan' => 'required',
+            'lokasi'       => 'required',
+            'kapasitas'    => 'required|integer',
+            'status'       => 'required',
+            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $data = $request->all();
+
+        // Jika upload gambar baru
+        if ($request->hasFile('gambar')) {
+
+            // hapus gambar lama (jika ada)
+            if ($room->gambar && file_exists(public_path('storage/rooms/' . $room->gambar))) {
+                unlink(public_path('storage/rooms/' . $room->gambar));
+            }
+
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('rooms', $filename, 'public');
+            $data['gambar'] = $filename;
+        }
+
+        $room->update($data);
+
+        return redirect()
+            ->route('Room.index')
+            ->with('success', 'Room berhasil diperbarui');
     }
 
+
     /**
-     * Remove the specified resource from storage.
+     * Hapus room
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
-        //
+        $room->delete();
+
+        return redirect()
+            ->route('Room.index')
+            ->with('success', 'Room berhasil dihapus');
     }
 }
