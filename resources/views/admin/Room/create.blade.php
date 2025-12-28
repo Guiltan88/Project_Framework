@@ -67,16 +67,7 @@
                         </div>
                     </div>
 
-                    {{-- Fasilitas --}}
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Fasilitas</label>
-                        <div class="col-sm-10">
-                            <textarea name="fasilitas"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Proyektor, AC, Whiteboard">{{ old('fasilitas') }}</textarea>
-                        </div>
-                    </div>
+
 
                     {{-- Status --}}
                     <div class="row mb-3">
@@ -101,6 +92,28 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                    </div>
+
+                    <!-- Checkbox fasilitas -->
+                    <div class="mb-3">
+                    <label class="form-label">Fasilitas</label>
+                    <div class="row">
+                        @foreach ($facilities as $facility)
+                        <div class="col-md-4">
+                            <div class="form-check">
+                            <input class="form-check-input"
+                                    type="checkbox"
+                                    name="facilities[]"
+                                    value="{{ $facility->id }}"
+                                    id="facility{{ $facility->id }}">
+                            <label class="form-check-label"
+                                    for="facility{{ $facility->id }}">
+                                {{ $facility->nama_fasilitas }}
+                            </label>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                     </div>
 
                     {{-- Button --}}

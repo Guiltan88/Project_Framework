@@ -14,6 +14,7 @@
                     <th>Kode Ruangan</th>
                     <th>Nama Ruangan</th>
                     <th>Lokasi</th>
+                    <th>Fasilitas</th>
                     <th>Gambar</th>
                     <th>Status</th>
                     <th width="120">Aksi</th>
@@ -26,6 +27,13 @@
                     <td><strong>{{ $room->kode_ruangan }}</strong></td>
                     <td>{{ $room->nama_ruangan }}</td>
                     <td>{{ $room->lokasi }}</td>
+                    <td>
+                    @foreach ($room->facilities as $facility)
+                        <span class="badge bg-label-info">
+                        {{ $facility->nama_fasilitas }}
+                        </span>
+                    @endforeach
+                    </td>
                     <td>
                         @if ($room->gambar)
                             <img src="{{ asset('storage/rooms/' . $room->gambar) }}"

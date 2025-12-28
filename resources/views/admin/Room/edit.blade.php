@@ -61,15 +61,6 @@
                         </div>
                     </div>
 
-                    {{-- Fasilitas --}}
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Fasilitas</label>
-                        <div class="col-sm-10">
-                            <textarea name="fasilitas"
-                                      class="form-control"
-                                      rows="3">{{ old('fasilitas', $room->fasilitas) }}</textarea>
-                        </div>
-                    </div>
 
                     {{-- Status --}}
                     <div class="row mb-3">
@@ -97,6 +88,30 @@
                             @endif
 
                             <input type="file" name="gambar" class="form-control">
+                        </div>
+                    </div>
+
+                    {{-- FASILITAS --}}
+                    <div class="mb-3">
+                        <label class="form-label">Fasilitas</label>
+                        <div class="row">
+                            @foreach ($facilities as $facility)
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            name="facilities[]"
+                                            value="{{ $facility->id }}"
+                                            id="facility{{ $facility->id }}"
+                                            {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}>
+
+                                        <label class="form-check-label"
+                                            for="facility{{ $facility->id }}">
+                                            {{ $facility->nama_fasilitas }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 

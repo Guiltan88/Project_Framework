@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Facility;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -21,7 +22,8 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('admin.Room.create');
+        $facilities = Facility::all();
+        return view('admin.Room.create', compact('facilities'));
     }
 
     public function store(Request $request)
@@ -32,25 +34,33 @@ class RoomController extends Controller
             'lokasi'       => 'required',
             'kapasitas'    => 'required|integer',
             'status'       => 'required',
-            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'facilities'   => 'nullable|array'
         ]);
 
-        $data = $request->all();
-
+        // upload gambar
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('rooms', $filename, 'public');
-            $data['gambar'] = $filename;
+            $path = $request->file('gambar')->store('rooms', 'public');
         }
 
-        Room::create($data);
+        $room = Room::create([
+            'kode_ruangan' => $request->kode_ruangan,
+            'nama_ruangan' => $request->nama_ruangan,
+            'lokasi'       => $request->lokasi,
+            'kapasitas'    => $request->kapasitas,
+            'status'       => $request->status,
+            'gambar'       => $path ?? null
+        ]);
+
+        // simpan relasi fasilitas (many to many)
+        if ($request->facilities) {
+            $room->facilities()->sync($request->facilities);
+        }
 
         return redirect()
             ->route('Room.index')
-            ->with('success', 'Room berhasil ditambahkan');
+            ->with('success', 'Ruangan berhasil ditambahkan');
     }
-
 
 
     /**
@@ -58,8 +68,16 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        return view('admin.Room.edit', compact('room'));
+        $facilities = Facility::all();
+        $selectedFacilities = $room->facilities->pluck('id')->toArray();
+
+        return view('admin.Room.edit', compact(
+            'room',
+            'facilities',
+            'selectedFacilities'
+        ));
     }
+
 
     public function update(Request $request, Room $room)
     {
@@ -72,12 +90,11 @@ class RoomController extends Controller
             'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $data = $request->all();
+        $data = $request->except('facilities');
 
-        // Jika upload gambar baru
+        // Upload gambar baru
         if ($request->hasFile('gambar')) {
 
-            // hapus gambar lama (jika ada)
             if ($room->gambar && file_exists(public_path('storage/rooms/' . $room->gambar))) {
                 unlink(public_path('storage/rooms/' . $room->gambar));
             }
@@ -88,12 +105,17 @@ class RoomController extends Controller
             $data['gambar'] = $filename;
         }
 
+        // Update room
         $room->update($data);
+
+        // ✅ SYNC FASILITAS
+        $room->facilities()->sync($request->facilities ?? []);
 
         return redirect()
             ->route('Room.index')
             ->with('success', 'Room berhasil diperbarui');
     }
+
 
 
     /**
