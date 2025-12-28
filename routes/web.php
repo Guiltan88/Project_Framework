@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\GuestController;
-use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\FacilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +22,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
-// Property
-Route::get('/property', [PropertyController::class, 'index'])
-    ->name('property');
-
 // ================= ROOM MANAGEMENT =================
 Route::resource('room', RoomController::class)->names('Room');
+
+Route::resource('facility', FacilityController::class)->names('Property');
 
 
 // Staff & Guest

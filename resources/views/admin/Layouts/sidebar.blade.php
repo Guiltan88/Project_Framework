@@ -102,8 +102,8 @@
             </li>
 
             <!-- Property -->
-            <li class="menu-item {{ request()->routeIs('property') ? 'active' : '' }}">
-                <a href="{{ route('property') }}" class="menu-link">
+            <li class="menu-item {{ request()->routeIs('Property.*') ? 'active' : '' }}">
+                <a href="{{ route('Property.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-tv"></i>
                 <div>Property</div>
                 </a>

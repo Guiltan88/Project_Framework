@@ -2,15 +2,17 @@
 @section('title', 'Room')
 @section('content')
 <div class="card">
-    <h5 class="card-header">Data Room</h5>
-    <a href="{{ route('Room.create') }}"
-        class="btn btn-primary mb-3">
-        + Tambah Room
-    </a>
+    <h5 class="card-header d-flex justify-content-between align-items-center">
+        Daftar Fasilitas
+        <a href="{{ route('Room.create') }}" class="btn btn-primary btn-sm">
+            + Tambah Room
+        </a>
+    </h5>
     <div class="table-responsive text-nowrap">
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>Kode Ruangan</th>
                     <th>Nama Ruangan</th>
                     <th>Lokasi</th>
@@ -24,6 +26,7 @@
             <tbody class="table-border-bottom-0">
                 @foreach ($rooms as $room)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td><strong>{{ $room->kode_ruangan }}</strong></td>
                     <td>{{ $room->nama_ruangan }}</td>
                     <td>{{ $room->lokasi }}</td>
