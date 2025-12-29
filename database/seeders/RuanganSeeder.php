@@ -5,20 +5,21 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Room;
+use App\Models\Floor;
 
 class RuanganSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        for ($i = 1; $i <= 20; $i++) {
-            Room::create([
-                'kode_ruangan' => "R-$i",
-                'nama_ruangan' => "Ruang Kelas $i",
-                'lokasi' => "Gedung A - Lantai " . rand(1,5),
-                'kapasitas' => rand(20, 100),
-                'fasilitas' => 'Proyektor, AC, Whiteboard'
-            ]);
-        }
+        $floor = Floor::first(); // ambil lantai pertama
+
+        Room::create([
+            'floor_id'     => $floor->id,
+            'kode_ruangan' => 'R-101',
+            'nama_ruangan' => 'Ruang Kelas 1',
+            'kapasitas'    => 40,
+            'status'       => 'tersedia'
+        ]);
     }
 }
 

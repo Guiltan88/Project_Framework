@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Facility;
 use Illuminate\Http\Request;
+use App\Models\Building;
+use App\Models\Floor;
 
 class RoomController extends Controller
 {
@@ -20,21 +22,34 @@ class RoomController extends Controller
     /**
      * Form tambah room
      */
-    public function create()
+    public function create(Request $request)
     {
+        $buildings = Building::all();
+
+        $floors = [];
+        if ($request->building_id) {
+            $floors = Floor::where('building_id', $request->building_id)->get();
+        }
+
         $facilities = Facility::all();
-        return view('admin.Room.create', compact('facilities'));
+
+        return view('admin.Room.create', compact(
+            'buildings',
+            'floors',
+            'facilities'
+        ));
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
             'kode_ruangan' => 'required|unique:rooms',
             'nama_ruangan' => 'required',
-            'lokasi'       => 'required',
+            'lantai_id'    => 'required|exists:lantais,id',
             'kapasitas'    => 'required|integer',
             'status'       => 'required',
-            'gambar'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar'       => 'nullable|image',
             'facilities'   => 'nullable|array'
         ]);
 
@@ -46,11 +61,14 @@ class RoomController extends Controller
         $room = Room::create([
             'kode_ruangan' => $request->kode_ruangan,
             'nama_ruangan' => $request->nama_ruangan,
-            'lokasi'       => $request->lokasi,
+            'lantai_id'    => $request->lantai_id,
             'kapasitas'    => $request->kapasitas,
             'status'       => $request->status,
             'gambar'       => $path ?? null
         ]);
+
+        $room->facilities()->sync($request->facilities ?? []);
+
 
         // simpan relasi fasilitas (many to many)
         if ($request->facilities) {

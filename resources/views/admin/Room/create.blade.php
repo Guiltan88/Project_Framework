@@ -45,13 +45,43 @@
 
                     {{-- Lokasi --}}
                     <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Lokasi</label>
+                        <label class="col-sm-2 col-form-label">Gedung</label>
                         <div class="col-sm-10">
-                            <input type="text"
-                                   name="lokasi"
-                                   class="form-control"
-                                   value="{{ old('lokasi') }}"
-                                   placeholder="Gedung A - Lantai 2">
+                            <select name="gedung_id"
+                                    class="form-select @error('gedung_id') is-invalid @enderror"
+                                    required>
+                                <option value="">-- Pilih Gedung --</option>
+                                @foreach($buildings as $gedung)
+                                    <option value="{{ $gedung->id }}"
+                                        {{ old('gedung_id') == $gedung->id ? 'selected' : '' }}>
+                                        {{ $gedung->nama_gedung }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('gedung_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Pilih Lantai --}}
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Lantai</label>
+                        <div class="col-sm-10">
+                            <select name="lantai_id"
+                                    class="form-select @error('lantai_id') is-invalid @enderror"
+                                    required>
+                                <option value="">-- Pilih Lantai --</option>
+                                @foreach($floors as $lantai)
+                                    <option value="{{ $lantai->id }}"
+                                        {{ old('lantai_id') == $lantai->id ? 'selected' : '' }}>
+                                        Lantai {{ $lantai->nomor_lantai }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('lantai_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -66,8 +96,6 @@
                                    placeholder="40">
                         </div>
                     </div>
-
-
 
                     {{-- Status --}}
                     <div class="row mb-3">
