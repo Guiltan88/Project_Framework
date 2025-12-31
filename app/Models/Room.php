@@ -3,34 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Room extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'kode_ruangan',
         'nama_ruangan',
-        'lokasi',
+        'gedung_id',
         'kapasitas',
-        'fasilitas',
         'status',
         'gambar',
     ];
 
-    public function bookings()
+    public function building()
     {
-        return $this->hasMany(Booking::class);
+        return $this->belongsTo(Building::class, 'gedung_id');
     }
 
     public function facilities()
     {
         return $this->belongsToMany(Facility::class);
-    }
-
-    public function floor() {
-        return $this->belongsTo(Floor::class);
     }
 }
 

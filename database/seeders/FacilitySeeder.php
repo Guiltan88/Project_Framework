@@ -8,23 +8,24 @@ use App\Models\Facility;
 
 class FacilitySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-
 
     public function run(): void
     {
         $data = [
-            ['nama_fasilitas' => 'AC'],
-            ['nama_fasilitas' => 'Proyektor'],
-            ['nama_fasilitas' => 'Whiteboard'],
-            ['nama_fasilitas' => 'Sound System'],
-            ['nama_fasilitas' => 'WiFi'],
-            ['nama_fasilitas' => 'Kursi'],
-            ['nama_fasilitas' => 'Meja'],
+            'Proyektor',
+            'AC',
+            'WiFi',
+            'Papan Tulis',
+            'Sound System',
+            'TV',
+            'Stop Kontak'
         ];
 
-        Facility::insert($data);
+        foreach ($data as $item) {
+            Facility::create([
+                'nama_fasilitas' => $item,
+                'keterangan' => 'Fasilitas ' . $item
+            ]);
+        }
     }
 };

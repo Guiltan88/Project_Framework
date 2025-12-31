@@ -10,22 +10,13 @@ class BuildingSeeder extends Seeder
 {
     public function run(): void
     {
-        Building::insert([
-            [
-                'kode_gedung'   => 'GD-A',
-                'nama_gedung'   => 'Gedung A',
-                'jumlah_lantai' => 4,
-            ],
-            [
-                'kode_gedung'   => 'GD-B',
-                'nama_gedung'   => 'Gedung B',
-                'jumlah_lantai' => 3,
-            ],
-            [
-                'kode_gedung'   => 'GD-C',
-                'nama_gedung'   => 'Gedung C',
-                'jumlah_lantai' => 5,
-            ],
-        ]);
+        for ($i = 1; $i <= 5; $i++) {
+            Building::create([
+                'kode_gedung'   => 'G-0' . $i,
+                'nama_gedung'   => 'Gedung ' . chr(64 + $i),
+                'jumlah_lantai' => rand(2, 5),
+                'keterangan'    => 'Gedung otomatis'
+            ]);
+        }
     }
 }

@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('buildings', function (Blueprint $table) {
@@ -19,13 +15,15 @@ return new class extends Migration
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });
+
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('building');
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropForeign(['gedung_id']);
+            $table->dropColumn('gedung_id');
+        });
     }
+
 };

@@ -24,7 +24,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // ================= ROOM MANAGEMENT =================
 Route::resource('room', RoomController::class)->names('Room');
-
 Route::resource('facility', FacilityController::class)->names('Property');
 
 

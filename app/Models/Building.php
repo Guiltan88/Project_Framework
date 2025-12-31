@@ -8,11 +8,14 @@ class Building extends Model
 {
     protected $fillable = [
         'kode_gedung',
-        'nama_gedung'
+        'nama_gedung',
+        'jumlah_lantai',
+        'keterangan'
     ];
 
-    public function floors()
+    public function rooms()
     {
-        return $this->hasMany(Floor::class);
+        return $this->hasMany(Room::class, 'gedung_id');
     }
 }
+

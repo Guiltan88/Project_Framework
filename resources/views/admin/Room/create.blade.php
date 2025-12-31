@@ -12,8 +12,8 @@
 
             <div class="card-body">
                 <form action="{{ route('Room.store') }}"
-                    method="POST"
-                    enctype="multipart/form-data">
+                      method="POST"
+                      enctype="multipart/form-data">
                     @csrf
 
                     {{-- Kode Ruangan --}}
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    {{-- Lokasi --}}
+                    {{-- Gedung --}}
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Gedung</label>
                         <div class="col-sm-10">
@@ -51,7 +51,7 @@
                                     class="form-select @error('gedung_id') is-invalid @enderror"
                                     required>
                                 <option value="">-- Pilih Gedung --</option>
-                                @foreach($buildings as $gedung)
+                                @foreach ($buildings as $gedung)
                                     <option value="{{ $gedung->id }}"
                                         {{ old('gedung_id') == $gedung->id ? 'selected' : '' }}>
                                         {{ $gedung->nama_gedung }}
@@ -59,27 +59,6 @@
                                 @endforeach
                             </select>
                             @error('gedung_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- Pilih Lantai --}}
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Lantai</label>
-                        <div class="col-sm-10">
-                            <select name="lantai_id"
-                                    class="form-select @error('lantai_id') is-invalid @enderror"
-                                    required>
-                                <option value="">-- Pilih Lantai --</option>
-                                @foreach($floors as $lantai)
-                                    <option value="{{ $lantai->id }}"
-                                        {{ old('lantai_id') == $lantai->id ? 'selected' : '' }}>
-                                        Lantai {{ $lantai->nomor_lantai }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('lantai_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -108,54 +87,54 @@
                         </div>
                     </div>
 
-                    {{-- Gambar Ruangan --}}
+                    {{-- Gambar --}}
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Gambar</label>
                         <div class="col-sm-10">
                             <input type="file"
-                                name="gambar"
-                                class="form-control @error('gambar') is-invalid @enderror"
-                                accept="image/*">
+                                   name="gambar"
+                                   class="form-control @error('gambar') is-invalid @enderror"
+                                   accept="image/*">
                             @error('gambar')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Checkbox fasilitas -->
+                    {{-- Fasilitas --}}
                     <div class="mb-3">
-                    <label class="form-label">Fasilitas</label>
-                    <div class="row">
-                        @foreach ($facilities as $facility)
-                        <div class="col-md-4">
-                            <div class="form-check">
-                            <input class="form-check-input"
-                                    type="checkbox"
-                                    name="facilities[]"
-                                    value="{{ $facility->id }}"
-                                    id="facility{{ $facility->id }}">
-                            <label class="form-check-label"
-                                    for="facility{{ $facility->id }}">
-                                {{ $facility->nama_fasilitas }}
-                            </label>
-                            </div>
+                        <label class="form-label">Fasilitas</label>
+                        <div class="row">
+                            @foreach ($facilities as $facility)
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="facilities[]"
+                                               value="{{ $facility->id }}"
+                                               id="facility{{ $facility->id }}">
+                                        <label class="form-check-label"
+                                               for="facility{{ $facility->id }}">
+                                            {{ $facility->nama_fasilitas }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        @endforeach
-                    </div>
                     </div>
 
                     {{-- Button --}}
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
                             <a href="{{ route('Room.index') }}"
-                               class="btn btn-secondary me-2">Batal</a>
-
+                               class="btn btn-secondary me-2">
+                                Batal
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 Simpan
                             </button>
                         </div>
                     </div>
-
 
                 </form>
             </div>

@@ -9,14 +9,17 @@ return new class extends Migration {
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('floor_id')
-                ->constrained()
+
+            $table->foreignId('gedung_id')
+                ->constrained('buildings')
                 ->cascadeOnDelete();
+
             $table->string('kode_ruangan')->unique();
             $table->string('nama_ruangan');
             $table->integer('kapasitas');
             $table->enum('status', ['tersedia', 'tidak tersedia']);
             $table->string('gambar')->nullable();
+
             $table->timestamps();
         });
 
@@ -28,4 +31,3 @@ return new class extends Migration {
         Schema::dropIfExists('rooms');
     }
 };
-
