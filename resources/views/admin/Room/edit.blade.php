@@ -39,14 +39,18 @@
                         </div>
                     </div>
 
-                    {{-- Lokasi --}}
+                    {{-- GEDUNG --}}
                     <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Lokasi</label>
+                        <label class="col-sm-2 col-form-label">Gedung</label>
                         <div class="col-sm-10">
-                            <input type="text"
-                                   name="lokasi"
-                                   class="form-control"
-                                   value="{{ old('lokasi', $room->lokasi) }}">
+                            <select name="gedung_id" class="form-select" required>
+                                @foreach ($buildings as $gedung)
+                                    <option value="{{ $gedung->id }}"
+                                        {{ $room->gedung_id == $gedung->id ? 'selected' : '' }}>
+                                        {{ $gedung->nama_gedung }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -60,7 +64,6 @@
                                    value="{{ old('kapasitas', $room->kapasitas) }}">
                         </div>
                     </div>
-
 
                     {{-- Status --}}
                     <div class="row mb-3">
@@ -82,16 +85,15 @@
                         <label class="col-sm-2 col-form-label">Gambar</label>
                         <div class="col-sm-10">
                             @if ($room->gambar)
-                                <img src="{{ asset('storage/rooms/' . $room->gambar) }}"
+                                <img src="{{ asset('storage/' . $room->gambar) }}"
                                      width="120"
                                      class="mb-2 rounded d-block">
                             @endif
-
                             <input type="file" name="gambar" class="form-control">
                         </div>
                     </div>
 
-                    {{-- FASILITAS --}}
+                    {{-- Fasilitas --}}
                     <div class="mb-3">
                         <label class="form-label">Fasilitas</label>
                         <div class="row">
@@ -99,14 +101,11 @@
                                 <div class="col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input"
-                                            type="checkbox"
-                                            name="facilities[]"
-                                            value="{{ $facility->id }}"
-                                            id="facility{{ $facility->id }}"
-                                            {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}>
-
-                                        <label class="form-check-label"
-                                            for="facility{{ $facility->id }}">
+                                               type="checkbox"
+                                               name="facilities[]"
+                                               value="{{ $facility->id }}"
+                                               {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}>
+                                        <label class="form-check-label">
                                             {{ $facility->nama_fasilitas }}
                                         </label>
                                     </div>
@@ -119,7 +118,9 @@
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
                             <a href="{{ route('Room.index') }}"
-                               class="btn btn-secondary me-2">Batal</a>
+                               class="btn btn-secondary me-2">
+                                Batal
+                            </a>
 
                             <button type="submit" class="btn btn-primary">
                                 Update

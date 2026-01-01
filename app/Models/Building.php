@@ -10,7 +10,8 @@ class Building extends Model
         'kode_gedung',
         'nama_gedung',
         'jumlah_lantai',
-        'keterangan'
+        'keterangan',
+        'gambar',
     ];
 
     public function rooms()

@@ -6,7 +6,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\FacilityController;
-
+use App\Http\Controllers\BuildingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes (Testing Mode - No Middleware)
@@ -25,7 +25,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // ================= ROOM MANAGEMENT =================
 Route::resource('room', RoomController::class)->names('Room');
 Route::resource('facility', FacilityController::class)->names('Property');
-
+Route::resource('building', BuildingController::class)->names('Building');
 
 // Staff & Guest
 Route::get('/staff', [StaffController::class, 'index'])->name('staff');

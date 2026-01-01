@@ -93,13 +93,13 @@
               </a>
             </li>
 
-            {{-- <!-- Building -->
+            <!-- Building -->
             <li class="menu-item {{ request()->routeIs('Building.*') ? 'active' : '' }}">
                 <a href="{{ route('Building.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-door-open"></i>
+                <i class="menu-icon tf-icons bx bx-building"></i>
                 <div>Building</div>
                 </a>
-            </li> --}}
+            </li>
 
             <!-- Room -->
             <li class="menu-item {{ request()->routeIs('Room.*') ? 'active' : '' }}">

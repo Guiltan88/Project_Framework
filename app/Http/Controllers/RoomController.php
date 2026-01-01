@@ -65,16 +65,12 @@ class RoomController extends Controller
 
     public function edit(Room $room)
     {
-        $buildings  = Building::all();
-        $facilities = Facility::all();
-        $selectedFacilities = $room->facilities->pluck('id')->toArray();
-
-        return view('admin.Room.edit', compact(
-            'room',
-            'buildings',
-            'facilities',
-            'selectedFacilities'
-        ));
+        return view('admin.Room.edit', [
+            'room' => $room,
+            'buildings' => Building::all(),
+            'facilities' => Facility::all(),
+            'selectedFacilities' => $room->facilities->pluck('id')->toArray()
+        ]);
     }
 
     public function update(Request $request, Room $room)

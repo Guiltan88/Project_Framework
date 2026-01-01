@@ -15,15 +15,10 @@ return new class extends Migration {
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });
-
     }
 
     public function down(): void
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            $table->dropForeign(['gedung_id']);
-            $table->dropColumn('gedung_id');
-        });
+        Schema::dropIfExists('buildings');
     }
-
 };
