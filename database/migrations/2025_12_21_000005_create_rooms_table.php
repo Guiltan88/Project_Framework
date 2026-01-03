@@ -9,21 +9,16 @@ return new class extends Migration {
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('gedung_id')
-                ->constrained('buildings')
-                ->cascadeOnDelete();
-
             $table->string('kode_ruangan')->unique();
             $table->string('nama_ruangan');
+            $table->foreignId('gedung_id')->constrained('buildings')->onDelete('cascade');
+            $table->integer('lantai')->default(1);
             $table->integer('kapasitas');
-            $table->enum('status', ['tersedia', 'tidak tersedia']);
+            $table->enum('status', ['tersedia', 'tidak tersedia', 'dalam perbaikan'])->default('tersedia');
             $table->string('gambar')->nullable();
-
             $table->timestamps();
+            $table->softDeletes();
         });
-
-
     }
 
     public function down(): void

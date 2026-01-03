@@ -1,0 +1,273 @@
+/* Guest Rooms Styles */
+.guest-rooms .nav-pills .nav-link {
+    color: #6c757d;
+    border-radius: 0.375rem;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.guest-rooms .nav-pills .nav-link.active {
+    background-color: #696cff;
+    color: white;
+}
+
+.guest-rooms .nav-pills .nav-link:hover:not(.active) {
+    background-color: #f8f9fa;
+}
+
+/* Stats Cards */
+.guest-rooms .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+}
+
+.guest-rooms .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.guest-rooms .stat-card .avatar-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+
+/* Room Cards */
+.guest-rooms .room-card {
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    height: 100%;
+    position: relative;
+}
+
+.guest-rooms .room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: #696cff;
+}
+
+.guest-rooms .room-card:hover .card-title {
+    color: #696cff;
+}
+
+.guest-rooms .room-image-container {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.guest-rooms .room-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.guest-rooms .room-card:hover .room-image-container img {
+    transform: scale(1.05);
+}
+
+.guest-rooms .room-image-container .no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    width: 100%;
+    height: 100%;
+}
+
+/* Status Badges */
+.guest-rooms .badge.bg-label-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.guest-rooms .badge.bg-label-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.guest-rooms .badge.bg-label-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.guest-rooms .badge.bg-label-secondary {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    border: 1px solid rgba(108, 117, 125, 0.2);
+}
+
+.guest-rooms .badge.bg-label-info {
+    background-color: rgba(13, 202, 240, 0.1);
+    color: #0dcaf0;
+    border: 1px solid rgba(13, 202, 240, 0.2);
+}
+
+.guest-rooms .badge.bg-label-primary {
+    background-color: rgba(105, 108, 255, 0.1);
+    color: #696cff;
+    border: 1px solid rgba(105, 108, 255, 0.2);
+}
+
+.guest-rooms .status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Facilities Tags */
+.guest-rooms .facilities-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.guest-rooms .facility-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Pagination */
+.guest-rooms .pagination .page-link {
+    border-radius: 4px;
+    margin: 0 2px;
+    min-width: 32px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.guest-rooms .pagination .page-item.active .page-link {
+    background-color: #696cff;
+    border-color: #696cff;
+    color: white;
+}
+
+.guest-rooms .pagination .page-link:hover {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+/* Filter Card */
+.guest-rooms .filter-card {
+    border: 1px solid #e9ecef;
+    margin-bottom: 1.5rem;
+}
+
+.guest-rooms .filter-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Results Header */
+.guest-rooms .results-header {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Empty State */
+.guest-rooms .empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.guest-rooms .empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #dee2e6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .guest-rooms .nav-pills {
+        flex-direction: column;
+    }
+
+    .guest-rooms .nav-pills .nav-link {
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .guest-rooms .room-image-container {
+        height: 180px;
+    }
+
+    .guest-rooms .stat-card .card-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animation for Cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.guest-rooms .room-card {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.guest-rooms .room-card:nth-child(1) { animation-delay: 0.1s; }
+.guest-rooms .room-card:nth-child(2) { animation-delay: 0.2s; }
+.guest-rooms .room-card:nth-child(3) { animation-delay: 0.3s; }
+.guest-rooms .room-card:nth-child(4) { animation-delay: 0.4s; }
+.guest-rooms .room-card:nth-child(5) { animation-delay: 0.5s; }
+.guest-rooms .room-card:nth-child(6) { animation-delay: 0.6s; }
+.guest-rooms .room-card:nth-child(7) { animation-delay: 0.7s; }
+.guest-rooms .room-card:nth-child(8) { animation-delay: 0.8s; }
+
+/* Hover Effects */
+.guest-rooms .room-card .card-footer {
+    background-color: transparent;
+    border-top: 1px solid #e9ecef;
+    transition: border-color 0.3s ease;
+}
+
+.guest-rooms .room-card:hover .card-footer {
+    border-color: #696cff;
+}
+
+/* Quick Book Button */
+.guest-rooms .quick-book-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.guest-rooms .quick-book-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.guest-rooms .quick-book-btn:hover::after {
+    width: 300px;
+    height: 300px;
+}

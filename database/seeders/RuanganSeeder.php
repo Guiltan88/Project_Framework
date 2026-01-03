@@ -7,29 +7,55 @@ use Illuminate\Database\Seeder;
 use App\Models\Room;
 use App\Models\Building;
 use App\Models\Facility;
+
 class RuanganSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        $buildings = Building::pluck('id');
-        $facilities = Facility::pluck('id');
+        // Ambil semua gedung
+        $buildings = Building::all();
 
-        for ($i = 1; $i <= 100; $i++) {
+        // Ambil beberapa fasilitas
+        $facilities = Facility::inRandomOrder()->limit(8)->get();
 
-            $room = Room::create([
-                'kode_ruangan' => 'R-' . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'nama_ruangan' => 'Ruang Kelas ' . $i,
-                'gedung_id'    => $buildings->random(),
-                'kapasitas'    => rand(20, 60),
-                'status'       => rand(0, 1) ? 'tersedia' : 'tidak tersedia',
-            ]);
+        $roomTypes = [
+            'Ruang Kelas', 'Laboratorium', 'Ruang Rapat', 'Auditorium',
+            'Perpustakaan', 'Kantin', 'Ruang Dosen', 'Ruang Administrasi',
+            'Studio', 'Ruang Serbaguna', 'Ruang Olahraga', 'Asrama'
+        ];
 
-            // attach 1–3 fasilitas random
-            $room->facilities()->attach(
-                $facilities->random(rand(1, 3))->toArray()
-            );
+        $statuses = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
+
+        // Counter untuk kode ruangan (R-101, R-102, dst)
+        $roomCounter = 101;
+
+        foreach ($buildings as $building) {
+            // Buat beberapa ruangan untuk setiap gedung
+            $roomsPerBuilding = rand(3, 8);
+
+            for ($i = 1; $i <= $roomsPerBuilding; $i++) {
+                $lantai = rand(1, $building->jumlah_lantai);
+
+                $room = Room::create([
+                    'kode_ruangan' => 'R-' . $roomCounter, // Format: R-101, R-102, dst
+                    'nama_ruangan' => $roomTypes[array_rand($roomTypes)] . ' ' . $building->nama_gedung . ' ' . $lantai . '0' . $i,
+                    'gedung_id'    => $building->id,
+                    'lantai'       => $lantai,
+                    'kapasitas'    => rand(20, 100),
+                    'status'       => $statuses[array_rand($statuses)],
+                    'gambar'       => null,
+                ]);
+
+                // Attach random facilities
+                $randomFacilities = $facilities->random(rand(2, 5))->pluck('id')->toArray();
+                $room->facilities()->sync($randomFacilities);
+
+                // Increment counter untuk kode ruangan berikutnya
+                $roomCounter++;
+            }
         }
     }
 }
-
-

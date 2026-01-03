@@ -13,12 +13,15 @@ return new class extends Migration {
             $table->string('nama_gedung');
             $table->integer('jumlah_lantai');
             $table->text('keterangan')->nullable();
+            $table->string('gambar')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('buildings');
+        Schema::enableForeignKeyConstraints();
     }
 };

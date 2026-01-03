@@ -1,0 +1,128 @@
+/* Guest Booking Create Styles */
+
+/* Room image styling */
+.room-image img {
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.no-photo {
+    height: 200px;
+    color: #6c757d;
+}
+
+/* Form styling */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #696cff;
+    box-shadow: 0 0 0 0.25rem rgba(105, 108, 255, 0.25);
+}
+
+/* Booking summary */
+#bookingSummary {
+    transition: all 0.3s ease;
+}
+
+/* Card styling */
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.25rem;
+}
+
+.card-title {
+    font-weight: 600;
+    color: #566a7f;
+}
+
+/* Alert styling */
+.alert {
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+/* Breadcrumb styling */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item.active {
+    color: #697a8d;
+    font-weight: 500;
+}
+
+/* List styling */
+.list-unstyled li {
+    padding: 0.25rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body .row {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+
+    .mb-3 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .d-flex.justify-content-between > a,
+    .d-flex.justify-content-between > button {
+        width: 100%;
+    }
+}
+
+/* Form validation styling */
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Terms checkbox */
+.form-check-input:checked {
+    background-color: #696cff;
+    border-color: #696cff;
+}
+
+.form-check-input:focus {
+    border-color: #696cff;
+    box-shadow: 0 0 0 0.25rem rgba(105, 108, 255, 0.25);
+}

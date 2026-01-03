@@ -18,5 +18,14 @@ class Building extends Model
     {
         return $this->hasMany(Room::class, 'gedung_id');
     }
-}
 
+    // 🔥 METHOD BARU: Ambil array lantai berdasarkan jumlah_lantai
+    public function getFloorsAttribute()
+    {
+        $floors = [];
+        for ($i = 1; $i <= $this->jumlah_lantai; $i++) {
+            $floors[$i] = "Lantai $i";
+        }
+        return $floors;
+    }
+}

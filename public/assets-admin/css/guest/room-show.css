@@ -1,0 +1,227 @@
+/* ===== MODERN FACILITIES TABLE STYLES ===== */
+
+.facilities-modern-card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.facilities-modern-card .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eef1f6;
+    padding: 1.25rem 1.5rem;
+}
+
+.facilities-modern-card .card-header h5 {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.facilities-table-container {
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+
+.facilities-modern-table {
+    margin: 0;
+    border: none;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.facilities-modern-table thead {
+    background-color: #f8fafc;
+}
+
+.facilities-modern-table thead th {
+    border: none;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #eef1f6;
+}
+
+.facility-row {
+    transition: all 0.2s ease;
+}
+
+.facility-row:hover {
+    background-color: #f8fafc;
+}
+
+.facilities-modern-table tbody td {
+    border: none;
+    padding: 1.25rem 1.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #eef1f6;
+}
+
+.facilities-modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Facility Icon Modern Style */
+.facility-modern-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.facility-modern-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.facility-modern-desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
+    display: block;
+}
+
+/* Availability Badge */
+.availability-badge {
+    background-color: #e7f7ef;
+    color: #10b981;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+}
+
+.availability-badge i {
+    font-size: 1rem;
+}
+
+/* Alternating row colors */
+.facilities-modern-table tbody tr:nth-child(even) {
+    background-color: #fafbfd;
+}
+
+.facilities-modern-table tbody tr:nth-child(even):hover {
+    background-color: #f1f5f9;
+}
+
+/* Responsive Design for Modern Table */
+@media (max-width: 768px) {
+    .facilities-modern-table thead {
+        display: none;
+    }
+
+    .facilities-modern-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #eef1f6;
+        border-radius: 10px;
+        padding: 1rem;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .facilities-modern-table tbody tr:hover {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .facilities-modern-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #eef1f6;
+    }
+
+    .facilities-modern-table tbody tr:last-child td,
+    .facilities-modern-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .facilities-modern-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #64748b;
+        margin-right: 1rem;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+    }
+
+    .facilities-modern-table tbody td:first-child::before {
+        content: "Facility";
+    }
+
+    .facilities-modern-table tbody td:last-child::before {
+        content: "Status";
+    }
+
+    .facilities-modern-table tbody td:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .facilities-modern-table tbody td:first-child > div {
+        width: 100%;
+    }
+
+    .availability-badge {
+        align-self: flex-start;
+        margin-top: 0.5rem;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 576px) {
+    .facility-modern-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
+    .facility-modern-name {
+        font-size: 0.9rem;
+    }
+
+    .availability-badge {
+        min-width: 90px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation for table rows */
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.facility-row {
+    animation: fadeInRow 0.3s ease forwards;
+}
+
+.facility-row:nth-child(1) { animation-delay: 0.05s; }
+.facility-row:nth-child(2) { animation-delay: 0.1s; }
+.facility-row:nth-child(3) { animation-delay: 0.15s; }
+.facility-row:nth-child(4) { animation-delay: 0.2s; }
+.facility-row:nth-child(5) { animation-delay: 0.25s; }
+.facility-row:nth-child(6) { animation-delay: 0.3s; }
