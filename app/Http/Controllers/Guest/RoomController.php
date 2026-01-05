@@ -20,12 +20,20 @@ class RoomController extends Controller
             $query->where('gedung_id', $request->building);
         }
 
-        // Filter by status
+        // Filter by status - FIXED dengan mapping sesuai database
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            // Mapping dari form ke database
+            $statusMapping = [
+                'tersedia' => 'tersedia', // Available
+                'terisi' => 'tidak tersedia', // Occupied -> tidak tersedia
+                'maintenance' => 'dalam perbaikan' // Maintenance -> dalam perbaikan
+            ];
+
+            $dbStatus = $statusMapping[$request->status] ?? $request->status;
+            $query->where('status', $dbStatus);
         } else {
             // Default: show available rooms first
-            $query->orderByRaw("FIELD(status, 'tersedia', 'terisi', 'maintenance')");
+            $query->orderByRaw("FIELD(status, 'tersedia', 'tidak tersedia', 'dalam perbaikan')");
         }
 
         // Search
@@ -33,10 +41,10 @@ class RoomController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_ruangan', 'like', "%{$search}%")
-                  ->orWhere('kode_ruangan', 'like', "%{$search}%")
-                  ->orWhereHas('building', function($q2) use ($search) {
-                      $q2->where('nama_gedung', 'like', "%{$search}%");
-                  });
+                ->orWhere('kode_ruangan', 'like', "%{$search}%")
+                ->orWhereHas('building', function($q2) use ($search) {
+                    $q2->where('nama_gedung', 'like', "%{$search}%");
+                });
             });
         }
 
@@ -54,8 +62,8 @@ class RoomController extends Controller
                 break;
             case 'available':
             default:
-                $query->orderByRaw("FIELD(status, 'tersedia', 'terisi', 'maintenance')")
-                      ->orderBy('nama_ruangan');
+                $query->orderByRaw("FIELD(status, 'tersedia')")
+                    ->orderBy('nama_ruangan');
                 break;
         }
 
@@ -65,11 +73,11 @@ class RoomController extends Controller
         // Get all buildings for filter dropdown
         $buildings = Building::all();
 
-        // Statistics
+        // Statistics - FIXED sesuai nilai database
         $totalRooms = Room::count();
         $availableRooms = Room::where('status', 'tersedia')->count();
-        $occupiedRooms = Room::where('status', 'terisi')->count();
-        $maintenanceRooms = Room::where('status', 'maintenance')->count();
+        $occupiedRooms = Room::where('status', 'tidak tersedia')->count();
+        $maintenanceRooms = Room::where('status', 'dalam perbaikan')->count();
 
         return view('guest.rooms.index', compact(
             'rooms',
@@ -85,6 +93,24 @@ class RoomController extends Controller
     public function show(Room $room)
     {
         $room->load(['building', 'facilities']);
+
+        $room->display_status = match($room->status) {
+        'tersedia' => 'Available',
+        'tidak tersedia' => 'Occupied',
+        'dalam perbaikan' => 'Maintenance',
+        default => ucfirst($room->status)
+    };
+
+        // Tentukan field gambar
+        $room->image_url = null;
+        $imageFields = ['gambar', 'foto', 'image', 'photo'];
+
+        foreach($imageFields as $field) {
+            if($room->$field) {
+                $room->image_url = asset('storage/' . $room->$field);
+                break;
+            }
+        }
 
         // Check if room is booked today
         $bookedToday = Booking::where('room_id', $room->id)

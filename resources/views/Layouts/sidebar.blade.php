@@ -39,13 +39,6 @@
       </a>
     </li>
 
-    <!-- Staff Performance -->
-    <li class="menu-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}">
-      <a href="{{ route('admin.staff.performance') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-bar-chart"></i>
-        <div>Staff Performance</div>
-      </a>
-    </li>
 
     <!-- Buildings -->
     <li class="menu-item {{ request()->routeIs('admin.buildings.*') ? 'active' : '' }}">
@@ -101,14 +94,6 @@
         @if($pendingCount > 0)
           <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingCount }}</span>
         @endif
-      </a>
-    </li>
-
-    <!-- Staff Rooms View -->
-    <li class="menu-item {{ request()->routeIs('staff.rooms.*') ? 'active' : '' }}">
-      <a href="{{ route('staff.rooms.index') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-door-open"></i>
-        <div>Room Status</div>
       </a>
     </li>
 

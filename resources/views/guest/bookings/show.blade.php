@@ -1,10 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Booking Details')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/guest/booking-show.css') }}">
-@endpush
-
 @section('content')
     <!-- Header Card -->
     <div class="row mb-4">
@@ -50,13 +46,16 @@
                     <div class="row">
                         <div class="col-md-4 mb-3 mb-md-0">
                             <div class="room-image">
-                                @if($booking->room->foto)
-                                <img src="{{ asset('storage/' . $booking->room->foto) }}"
+                                <!-- TAMPILKAN GAMBAR DARI ROOM -->
+                                @if($booking->room->gambar)
+                                <img src="{{ asset('storage/' . $booking->room->gambar) }}"
                                      alt="{{ $booking->room->nama_ruangan }}"
-                                     class="img-fluid rounded">
+                                     class="img-fluid rounded"
+                                     style="width: 100%; height: 200px; object-fit: cover;">
                                 @else
-                                <div class="no-image">
-                                    <i class="bx bx-door-open"></i>
+                                <div class="no-image bg-light d-flex align-items-center justify-content-center rounded"
+                                     style="width: 100%; height: 200px;">
+                                    <i class="bx bx-door-open bx-lg text-muted"></i>
                                 </div>
                                 @endif
                             </div>
@@ -235,7 +234,3 @@
 </div>
 @endif
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/js/guest/booking-show.js') }}"></script>
-@endpush

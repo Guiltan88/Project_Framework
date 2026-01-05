@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\Facility;
 use App\Models\Building;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -121,6 +122,12 @@ class RoomController extends Controller
 
     public function destroy(Room $room)
     {
+        // Cek apakah room memiliki booking
+        if ($room->bookings()->count() > 0) {
+            return redirect()->route('admin.rooms.index')
+                ->with('error', 'Tidak bisa menghapus ruangan karena memiliki booking history.');
+        }
+
         if ($room->gambar) {
             Storage::disk('public')->delete($room->gambar);
         }

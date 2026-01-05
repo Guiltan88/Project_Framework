@@ -33,6 +33,8 @@ class Booking extends Model
     protected $casts = [
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
+        'waktu_mulai' => 'datetime',
+        'waktu_selesai' => 'datetime',
         'approved_at' => 'datetime',
         'cancelled_at' => 'datetime',
     ];

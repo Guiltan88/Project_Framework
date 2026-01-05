@@ -3,6 +3,23 @@
 
 @section('content')
 <div class="card">
+    <!-- Alert untuk Success/Error -->
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
+        <i class="bx bx-check-circle me-2"></i>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+        <i class="bx bx-error-circle me-2"></i>
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <h5 class="card-header d-flex justify-content-between align-items-center">
         Daftar Fasilitas
         <a href="{{ route('admin.facilities.create') }}" class="btn btn-primary btn-sm">
@@ -37,13 +54,16 @@
                     </td>
 
                     <td>
-                        <span class="badge bg-label-success">
-                            Aktif
-                        </span>
+                        @if($facility->status == 'active' || $facility->status == 1)
+                        <span class="badge bg-label-success">Aktif</span>
+                        @else
+                        <span class="badge bg-label-secondary">Non-Aktif</span>
+                        @endif
                     </td>
+
                     <td>
                         <span class="badge bg-label-info">
-                            {{ $facility->rooms->count() }} Ruangan
+                            {{ $facility->rooms_count ?? $facility->rooms->count() }} Ruangan
                         </span>
                     </td>
 
@@ -76,13 +96,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="text-center">
-                        Data fasilitas belum tersedia
+                    <td colspan="6" class="text-center">
+                        <i class="bx bx-package bx-lg text-muted"></i>
+                        <p class="text-muted mt-2">Data fasilitas belum tersedia</p>
                     </td>
                 </tr>
                 @endforelse
             </tbody>
-
         </table>
     </div>
 </div>

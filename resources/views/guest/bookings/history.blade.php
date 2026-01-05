@@ -14,7 +14,7 @@
                                 Track all your room booking requests and their status
                             </p>
                         </div>
-                        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+                        <a href="{{ route('guest.rooms.index') }}" class="btn btn-primary">
                             <i class="bx bx-plus me-1"></i> New Booking
                         </a>
                     </div>
@@ -198,7 +198,7 @@
                                     <th>Date & Time</th>
                                     <th>Participants</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
+                                    <th style="width: 150px;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -212,8 +212,8 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($booking->room->foto)
-                                            <img src="{{ asset('storage/' . $booking->room->foto) }}"
+                                            @if($booking->room->gambar)
+                                            <img src="{{ asset('storage/' . $booking->room->gambar) }}"
                                                  class="rounded me-2"
                                                  alt="{{ $booking->room->nama_ruangan }}"
                                                  style="width: 40px; height: 40px; object-fit: cover;"
@@ -291,36 +291,38 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <a href="{{ route('guest.bookings.show', $booking->id) }}"
-                                               class="btn btn-sm btn-outline-primary"
-                                               title="View Details">
-                                                <i class="bx bx-show"></i>
-                                            </a>
-
-                                            @if($booking->isPending())
-                                            <a href="{{ route('guest.bookings.edit', $booking->id) }}"
-                                               class="btn btn-sm btn-outline-warning"
-                                               title="Edit Booking">
-                                                <i class="bx bx-edit"></i>
-                                            </a>
-
-                                            <form action="{{ route('guest.bookings.cancel', $booking->id) }}"
-                                                  method="POST"
-                                                  onsubmit="return confirm('Are you sure you want to cancel this booking?')">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        title="Cancel Booking">
-                                                    <i class="bx bx-x"></i>
-                                                </button>
-                                            </form>
-                                            @endif
-
-                                            @if($booking->isApproved())
-                                            <a href="#" class="btn btn-sm btn-success" title="Download Receipt">
-                                                <i class="bx bx-download"></i>
-                                            </a>
-                                            @endif
+                                        <!-- Gunakan Dropdown untuk semua action -->
+                                        <div class="dropdown">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('guest.bookings.show', $booking->id) }}">
+                                                        <i class="bx bx-show me-2"></i> View Details
+                                                    </a>
+                                                </li>
+                                                @if($booking->isPending())
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ route('guest.bookings.edit', $booking->id) }}">
+                                                        <i class="bx bx-edit me-2"></i> Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('guest.bookings.cancel', $booking->id) }}"
+                                                          method="POST"
+                                                          onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                                                        @csrf
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="bx bx-x me-2"></i> Cancel
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                @endif
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -336,7 +338,7 @@
                                                 You haven't made any bookings yet.
                                             @endif
                                         </p>
-                                        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+                                        <a href="{{ route('guest.rooms.index') }}" class="btn btn-primary">
                                             <i class="bx bx-plus me-1"></i> Make Your First Booking
                                         </a>
                                     </td>
@@ -443,75 +445,14 @@
         </div>
     </div>
     @endif
-
-    @push('styles')
-    <style>
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #e9ecef;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .badge.bg-label-success {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: #28a745;
-        }
-        .badge.bg-label-danger {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-        }
-        .badge.bg-label-warning {
-            background-color: rgba(255, 193, 7, 0.1);
-            color: #ffc107;
-        }
-        .badge.bg-label-secondary {
-            background-color: rgba(108, 117, 125, 0.1);
-            color: #6c757d;
-        }
-        .pagination .page-link {
-            border-radius: 4px;
-            margin: 0 2px;
-            min-width: 32px;
-            text-align: center;
-        }
-        .pagination .page-item.active .page-link {
-            background-color: #696cff;
-            border-color: #696cff;
-        }
-        .table-hover tbody tr:hover {
-            background-color: rgba(105, 108, 255, 0.05);
-        }
-        .text-truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-    </style>
-    @endpush
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Update items per page
-        window.updatePerPage = function(perPage) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('per_page', perPage);
-            url.searchParams.set('page', 1);
-            window.location.href = url.toString();
-        };
-
-        // Auto-refresh status (optional)
-        function refreshBookingStatus() {
-            const pendingRows = document.querySelectorAll('tr:has(.badge.bg-label-warning)');
-            if (pendingRows.length > 0) {
-                console.log('Auto-refresh pending bookings...');
-                // You could implement AJAX refresh here
-            }
-        }
-
-        // Refresh every 30 seconds if there are pending bookings
-        setInterval(refreshBookingStatus, 30000);
-    });
-    </script>
 @endsection
+
+<script>
+// Update items per page
+window.updatePerPage = function(perPage) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('per_page', perPage);
+    url.searchParams.set('page', 1);
+    window.location.href = url.toString();
+};
+</script>

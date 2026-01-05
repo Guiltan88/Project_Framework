@@ -1,46 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Guest Dashboard')
 
-@push('styles')
-    <!-- Guest Dashboard CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/guest/dashboard.css') }}">
-@endpush
-
 @section('content')
 <div class="guest-dashboard">
-    <!-- Welcome Card -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar me-3">
-                                @php
-                                    $avatar = Auth::user()->photo ? asset('storage/' . Auth::user()->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=696cff&color=fff&size=64';
-                                @endphp
-                                <img src="{{ $avatar }}" alt="Profile" class="rounded-circle" width="64" height="64"
-                                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=696cff&color=fff&size=64'">
-                            </div>
-                            <div>
-                                <h4 class="card-title mb-1">Welcome back, {{ Auth::user()->name }}! 👋</h4>
-                                <p class="text-muted mb-0">
-                                    Here's what's happening with your room bookings today.
-                                    @if($stats['today_bookings'] > 0)
-                                        <span class="text-primary">You have {{ $stats['today_bookings'] }} booking(s) today.</span>
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-                            <i class="bx bx-plus me-1"></i> New Booking
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Statistics Cards -->
     <div class="row mb-4">
         @foreach([
@@ -224,7 +186,7 @@
                                 <td colspan="6" class="text-center py-5">
                                     <i class="bx bx-history bx-lg text-muted"></i>
                                     <p class="text-muted mt-3 mb-0">No recent activity</p>
-                                    <a href="{{ route('bookings.create') }}" class="btn btn-sm btn-primary mt-2">
+                                    <a href="{{ route('guest.rooms.index') }}" class="btn btn-sm btn-primary mt-2">
                                         <i class="bx bx-plus me-1"></i> Create First Booking
                                     </a>
                                 </td>
@@ -252,9 +214,15 @@
     </div>
     @endif
 </div>
-@endsection
 
-@push('scripts')
-    <!-- Guest Dashboard JavaScript -->
-    <script src="{{ asset('assets/js/guest/dashboard.js') }}"></script>
-@endpush
+<script>
+// Toast notification
+document.addEventListener('DOMContentLoaded', function() {
+    var toastEl = document.querySelector('.toast');
+    if (toastEl) {
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+});
+</script>
+@endsection

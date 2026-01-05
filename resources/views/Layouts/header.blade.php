@@ -255,13 +255,6 @@
                             @endif
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="{{ route('staff.rooms.index') }}">
-                            <i class="bx bx-door-open me-2"></i>
-                            <span>Room Status</span>
-                            <span class="badge bg-info rounded-pill ms-auto">{{ \App\Models\Room::where('status', 'tersedia')->count() }}/{{ \App\Models\Room::count() }}</span>
-                        </a>
-                    </li>
                     @endif
 
                     @if($user->hasRole('guest'))

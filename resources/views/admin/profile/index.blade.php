@@ -32,26 +32,6 @@
                             height="120"
                             width="120"
                         />
-                        <div class="button-wrapper">
-                            <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="d-inline">
-                                @csrf
-                                @method('PUT')
-                                <label for="quickPhotoUpload" class="btn btn-primary me-2 mb-2" tabindex="0">
-                                    <span class="d-none d-sm-block">Upload new photo</span>
-                                    <i class="bx bx-upload d-block d-sm-none"></i>
-                                    <input
-                                        type="file"
-                                        id="quickPhotoUpload"
-                                        name="photo"
-                                        class="account-file-input"
-                                        hidden
-                                        accept="image/png, image/jpeg"
-                                        onchange="this.form.submit()"
-                                    />
-                                </label>
-                            </form>
-                            <p class="text-muted mb-0 small">Allowed JPG, PNG. Max size 800K</p>
-                        </div>
                     </div>
                 </div>
 

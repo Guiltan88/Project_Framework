@@ -52,6 +52,12 @@ class FacilityController extends Controller
 
     public function destroy(Facility $facility)
     {
+        // Cek apakah facility digunakan di rooms
+        if ($facility->rooms()->count() > 0) {
+            return redirect()->route('admin.facilities.index')
+                ->with('error', 'Tidak bisa menghapus fasilitas karena masih digunakan di ruangan.');
+        }
+
         $facility->delete();
 
         return redirect()->route('admin.facilities.index')

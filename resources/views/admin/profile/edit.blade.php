@@ -1,132 +1,172 @@
-@extends('Layouts.app')
+@extends('layouts.app')
 @section('title', 'Edit Admin Profile')
 
 @section('content')
-    <!-- Navigation Pills -->
-    <ul class="nav nav-pills flex-column flex-md-row mb-3">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.profile.index') }}">
-                <i class="bx bx-user me-1"></i> Profile
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ route('admin.profile.edit') }}">
-                <i class="bx bx-edit me-1"></i> Edit Profile
-            </a>
-        </li>
-    </ul>
+<!-- Content wrapper -->
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card mb-4">
-                <h5 class="card-header">Profile Details</h5>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.profile.index') }}">
+                            <i class="bx bx-user me-1"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('admin.profile.edit') }}">
+                            <i class="bx bx-edit me-1"></i> Edit Profile
+                        </a>
+                    </li>
+                </ul>
 
-                <!-- Photo Upload Section -->
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <div class="position-relative d-inline-block">
-                            <img
-                                src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('assets-admin/img/avatars/default.png') }}"
-                                alt="user-avatar"
-                                class="d-block rounded-circle mb-3"
-                                height="150"
-                                width="150"
-                                id="editProfileAvatar"
-                            />
-                            <label for="photoUpload" class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle">
-                                <i class="bx bx-camera"></i>
-                            </label>
-                        </div>
-                        <input
-                            type="file"
-                            id="photoUpload"
-                            class="d-none"
-                            accept="image/*"
-                        >
-                        <p class="text-muted small mt-2">Click camera icon to change profile photo</p>
-                    </div>
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bx bx-check-circle me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @endif
 
-                <hr class="my-0">
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bx bx-error-circle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
 
-                <!-- Edit Form -->
-                <div class="card-body">
-                    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" id="editProfileForm">
-                        @csrf
-                        @method('PUT')
+                @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bx bx-error-circle me-2"></i>
+                    Please check the form for errors
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
 
-                        <!-- Hidden photo input for form submission -->
-                        <input type="file" name="photo" id="photoInput" class="d-none">
+                <div class="card mb-4">
+                    <h5 class="card-header">Profile Details</h5>
+                    <div class="card-body">
+                        @php
+                            $avatar = $user->photo ? asset('storage/' . $user->photo) :
+                                     'https://ui-avatars.com/api/?name=' . urlencode($user->name) .
+                                     '&background=696cff&color=fff&size=150';
+                        @endphp
 
-                        <div class="row">
-                            <!-- Name Field -->
-                            <div class="mb-3 col-md-6">
-                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text">
-                                        <i class="bx bx-user"></i>
-                                    </span>
+                        <div class="d-flex align-items-start align-items-sm-center gap-4 mb-4">
+                            <img
+                                src="{{ $avatar }}"
+                                alt="user-avatar"
+                                class="d-block rounded"
+                                height="100"
+                                width="100"
+                                id="uploadedAvatar"
+                                onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=696cff&color=fff&size=150'"
+                            />
+                            <div class="button-wrapper">
+                                <label for="photo" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                    <span class="d-none d-sm-block">Upload new photo</span>
+                                    <i class="bx bx-upload d-block d-sm-none"></i>
+                                </label>
+                                <p class="text-muted mb-0">Allowed JPG, PNG, GIF or WebP. Max size of 2MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-0" />
+
+                    <div class="card-body">
+                        <form id="formAccountSettings" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <input type="file" id="photo" name="photo" class="d-none" accept="image/*">
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
                                     <input
-                                        type="text"
                                         class="form-control @error('name') is-invalid @enderror"
+                                        type="text"
                                         id="name"
                                         name="name"
                                         value="{{ old('name', $user->name) }}"
                                         placeholder="Enter your full name"
                                         required
                                     />
+                                    @error('name')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @error('name')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            <!-- Email Field -->
-                            <div class="mb-3 col-md-6">
-                                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text">
-                                        <i class="bx bx-envelope"></i>
-                                    </span>
+                                <div class="mb-3 col-md-6">
+                                    <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
                                     <input
-                                        type="email"
                                         class="form-control @error('email') is-invalid @enderror"
+                                        type="email"
                                         id="email"
                                         name="email"
                                         value="{{ old('email', $user->email) }}"
-                                        placeholder="Enter your email address"
+                                        placeholder="john.doe@example.com"
                                         required
                                     />
+                                    @error('email')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @error('email')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
 
-                        <!-- Password Change Section -->
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Change Password (Optional)</h5>
+                                <div class="mb-3 col-md-6">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">ID (+62)</span>
+                                        <input
+                                            type="text"
+                                            id="phone"
+                                            name="phone"
+                                            class="form-control @error('phone') is-invalid @enderror"
+                                            placeholder="812-3456-7890"
+                                            value="{{ old('phone', $user->phone) }}"
+                                        />
+                                    </div>
+                                    @error('phone')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input
+                                        type="text"
+                                        class="form-control @error('department') is-invalid @enderror"
+                                        id="department"
+                                        name="department"
+                                        value="{{ old('department', $user->department) }}"
+                                        placeholder="IT Department"
+                                    />
+                                    @error('department')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="card-body">
+
+                            <div class="mt-4">
+                                <h6 class="mb-3">Change Password (Optional)</h6>
+                                <div class="alert alert-info mb-4">
+                                    <i class="bx bx-info-circle me-2"></i>
+                                    Leave blank if you don't want to change the password
+                                </div>
+
                                 <div class="row">
                                     <div class="mb-3 col-md-6">
                                         <label for="password" class="form-label">New Password</label>
                                         <div class="input-group input-group-merge">
-                                            <span class="input-group-text">
-                                                <i class="bx bx-lock"></i>
-                                            </span>
                                             <input
                                                 type="password"
-                                                class="form-control @error('password') is-invalid @enderror"
                                                 id="password"
                                                 name="password"
-                                                placeholder="Leave blank to keep current"
+                                                class="form-control @error('password') is-invalid @enderror"
+                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                             />
-                                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn">
-                                                <i class="bx bx-hide" id="passwordToggleIcon"></i>
-                                            </button>
+                                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                         </div>
                                         @error('password')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -134,138 +174,35 @@
                                     </div>
 
                                     <div class="mb-3 col-md-6">
-                                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                        <label for="password_confirmation" class="form-label">Confirm New Password</label>
                                         <div class="input-group input-group-merge">
-                                            <span class="input-group-text">
-                                                <i class="bx bx-lock-alt"></i>
-                                            </span>
                                             <input
                                                 type="password"
-                                                class="form-control"
                                                 id="password_confirmation"
                                                 name="password_confirmation"
-                                                placeholder="Confirm new password"
+                                                class="form-control"
+                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                             />
+                                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-text">
-                                    <i class="bx bx-info-circle me-1"></i>
+                                    <i class="bx bx-check-circle me-1"></i>
                                     Password must be at least 6 characters long
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Action Buttons -->
-                        <div class="mt-2">
-                            <div class="d-flex justify-content-between">
-                                <a href="{{ route('admin.profile.index') }}" class="btn btn-outline-secondary">
-                                    <i class="bx bx-arrow-back me-2"></i>Back to Profile
-                                </a>
-                                <div>
-                                    <button type="reset" class="btn btn-outline-warning me-2">
-                                        <i class="bx bx-reset me-2"></i>Reset
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bx bx-save me-2"></i>Save Changes
-                                    </button>
-                                </div>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
                             </div>
-                        </div>
-                    </form>
-
-                    <!-- Error Alert -->
-                    @if($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                            <i class="bx bx-error-circle me-2"></i>
-                            Please check the form for errors
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-
-<script>
-// Photo upload preview
-document.getElementById('photoUpload')?.addEventListener('change', function(e) {
-    if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('editProfileAvatar').src = e.target.result;
-        }
-        reader.readAsDataURL(e.target.files[0]);
-
-        // Set file to hidden input for form submission
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(e.target.files[0]);
-        document.getElementById('photoInput').files = dataTransfer.files;
-    }
-});
-
-// Camera button click
-document.querySelector('.btn-sm.btn-primary.position-absolute')?.addEventListener('click', function() {
-    document.getElementById('photoUpload').click();
-});
-
-// Password toggle
-document.getElementById('togglePasswordBtn')?.addEventListener('click', function() {
-    const passwordInput = document.getElementById('password');
-    const confirmInput = document.getElementById('password_confirmation');
-    const toggleIcon = document.getElementById('passwordToggleIcon');
-
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        if (confirmInput) confirmInput.type = 'text';
-        toggleIcon.className = 'bx bx-show';
-    } else {
-        passwordInput.type = 'password';
-        if (confirmInput) confirmInput.type = 'password';
-        toggleIcon.className = 'bx bx-hide';
-    }
-});
-
-// Form validation
-document.getElementById('editProfileForm')?.addEventListener('submit', function(e) {
-    const password = document.getElementById('password')?.value;
-    const confirmPassword = document.getElementById('password_confirmation')?.value;
-
-    if (password && password !== confirmPassword) {
-        e.preventDefault();
-        alert('Passwords do not match!');
-        return false;
-    }
-
-    if (password && password.length < 6) {
-        e.preventDefault();
-        alert('Password must be at least 6 characters long!');
-        return false;
-    }
-
-    return true;
-});
-
-// Auto-hide alerts
-document.addEventListener('DOMContentLoaded', function() {
-    // Hide success alert after 5 seconds
-    const successAlert = document.querySelector('.alert-success');
-    if (successAlert) {
-        setTimeout(() => {
-            const closeBtn = successAlert.querySelector('.btn-close');
-            if (closeBtn) closeBtn.click();
-        }, 5000);
-    }
-
-    // Hide error alert after 7 seconds
-    const errorAlert = document.querySelector('.alert-danger');
-    if (errorAlert) {
-        setTimeout(() => {
-            const closeBtn = errorAlert.querySelector('.btn-close');
-            if (closeBtn) closeBtn.click();
-        }, 7000);
-    }
-});
-</script>
+    <!-- / Content -->
+<!-- Content wrapper -->
 @endsection

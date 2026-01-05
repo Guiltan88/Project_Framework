@@ -1,216 +1,232 @@
-// staff/rooms.js - Index Page Functionality
+// assets/js/staff/rooms.js
 
-class StaffRoomsIndex {
-    constructor() {
-        this.init();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            boundary: document.body,
+            animation: true
+        });
+    });
 
-    init() {
-        this.setupSearch();
-        this.setupFilters();
-        this.setupRoomCardInteractions();
-        this.initializeTooltips();
-    }
+    // Image lazy loading dengan efek loading
+    const roomImages = document.querySelectorAll('.room-image-container-staff img');
 
-    /**
-     * Setup search functionality
-     */
-    setupSearch() {
-        const searchForm = document.querySelector('.search-form-inline');
-        const searchInput = document.querySelector('.search-input');
-        const clearBtn = document.querySelector('.clear-btn');
-
-        if (searchForm && searchInput) {
-            // Debounce search
-            let debounceTimer;
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    if (e.target.value.length >= 2 || e.target.value.length === 0) {
-                        searchForm.submit();
-                    }
-                }, 500);
-            });
-
-            // Clear search
-            if (clearBtn) {
-                clearBtn.addEventListener('click', () => {
-                    searchInput.value = '';
-                    searchForm.submit();
-                });
-            }
-
-            // Prevent form submission on enter for real-time search
-            searchForm.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
+    roomImages.forEach(img => {
+        // Tambah kelas loaded ketika gambar selesai load
+        if (img.complete) {
+            img.classList.add('loaded');
+        } else {
+            img.addEventListener('load', function() {
+                this.classList.add('loaded');
             });
         }
+
+        // Tambah event click untuk detail
+        img.addEventListener('click', function() {
+            const roomCard = this.closest('.room-card-staff');
+            const detailLink = roomCard.querySelector('.btn-outline-primary');
+            if (detailLink) {
+                window.location.href = detailLink.href;
+            }
+        });
+
+        img.style.cursor = 'pointer';
+    });
+
+    // Filter collapse animation
+    const filterToggle = document.querySelector('[data-bs-target="#filterCollapse"]');
+    const filterCollapse = document.getElementById('filterCollapse');
+
+    if (filterToggle && filterCollapse) {
+        // Sembunyikan filter secara default di mobile
+        if (window.innerWidth < 768) {
+            filterCollapse.classList.remove('show');
+        }
+
+        filterToggle.addEventListener('click', function() {
+            const isExpanded = filterCollapse.classList.contains('show');
+            const icon = this.querySelector('i');
+
+            if (isExpanded) {
+                // Ubah icon menjadi filter
+                icon.className = 'bx bx-filter-alt me-1';
+            } else {
+                // Ubah icon menjadi filter-open
+                icon.className = 'bx bx-filter me-1';
+            }
+        });
     }
 
-    /**
-     * Setup filter functionality
-     */
-    setupFilters() {
-        const filterSelects = document.querySelectorAll('.filter-select');
+    // Auto-hide alerts dengan animasi
+    const alerts = document.querySelectorAll('.rooms-alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'all 0.5s ease';
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-20px)';
 
-        filterSelects.forEach(select => {
-            select.addEventListener('change', () => {
-                // Submit the parent form when filter changes
-                const form = select.closest('form');
-                if (form) {
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 500);
+        }, 5000);
+    });
+
+    // Search input dengan debounce
+    const searchInput = document.querySelector('.search-input');
+    let searchTimeout;
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+
+            // Tampilkan efek loading
+            const originalPlaceholder = this.placeholder;
+            this.placeholder = 'Mencari...';
+
+            searchTimeout = setTimeout(() => {
+                if (this.value.length >= 2 || this.value.length === 0) {
+                    // Reset placeholder
+                    this.placeholder = originalPlaceholder;
+
+                    // Submit form dengan animasi
+                    const form = this.closest('form');
+                    const submitBtn = form.querySelector('button[type="submit"]');
+
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="bx bx-loader bx-spin me-1"></i> Mencari...';
+                        submitBtn.disabled = true;
+
+                        setTimeout(() => {
+                            form.submit();
+                        }, 300);
+                    } else {
+                        form.submit();
+                    }
+                } else {
+                    this.placeholder = originalPlaceholder;
+                }
+            }, 800);
+        });
+    }
+
+    // Filter select dengan animasi
+    const filterSelects = document.querySelectorAll('.filter-select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            // Tampilkan animasi loading
+            const form = this.closest('form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="bx bx-loader bx-spin me-1"></i> Memfilter...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                     form.submit();
-                }
-            });
-        });
-    }
-
-    /**
-     * Setup room card interactions
-     */
-    setupRoomCardInteractions() {
-        const roomCards = document.querySelectorAll('.room-card-staff');
-
-        roomCards.forEach(card => {
-            // Click on card body goes to detail page
-            const cardBody = card.querySelector('.card-body');
-            const detailLink = card.querySelector('a[href*="show"]');
-
-            if (cardBody && detailLink) {
-                cardBody.addEventListener('click', (e) => {
-                    // Don't trigger if clicking on links or buttons
-                    if (!e.target.closest('a') && !e.target.closest('button')) {
-                        window.location.href = detailLink.href;
-                    }
-                });
-
-                cardBody.style.cursor = 'pointer';
+                }, 500);
+            } else {
+                form.submit();
             }
+        });
+    });
 
-            // Add hover effect
-            card.addEventListener('mouseenter', () => {
-                card.classList.add('card-hovered');
+    // Smooth scroll ke top ketika filter diterapkan
+    const filterForm = document.querySelector('.filter-form-grid');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Scroll ke top dengan smooth
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
 
-            card.addEventListener('mouseleave', () => {
-                card.classList.remove('card-hovered');
-            });
+            // Submit form setelah scroll
+            setTimeout(() => {
+                this.submit();
+            }, 500);
         });
     }
 
-    /**
-     * Initialize Bootstrap tooltips
-     */
-    initializeTooltips() {
-        const tooltipTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        );
+    // Parallax effect untuk room cards
+    const roomCards = document.querySelectorAll('.room-card-staff');
 
-        tooltipTriggerList.map(tooltipTriggerEl => {
-            return new bootstrap.Tooltip(tooltipTriggerEl, {
-                trigger: 'hover',
-                placement: 'top'
+    roomCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const cardRect = this.getBoundingClientRect();
+            const x = e.clientX - cardRect.left;
+            const y = e.clientY - cardRect.top;
+
+            const centerX = cardRect.width / 2;
+            const centerY = cardRect.height / 2;
+
+            const rotateY = (x - centerX) / 25;
+            const rotateX = (centerY - y) / 25;
+
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(-8px)';
+        });
+    });
+
+    // Animasi untuk capacity badge
+    const capacityBadges = document.querySelectorAll('.capacity-badge');
+    capacityBadges.forEach(badge => {
+        badge.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) rotate(5deg)';
+        });
+
+        badge.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0)';
+        });
+    });
+
+    // Copy room name on double click
+    const roomTitles = document.querySelectorAll('.room-title');
+    roomTitles.forEach(title => {
+        title.addEventListener('dblclick', function() {
+            const text = this.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Tampilkan feedback
+                const originalText = this.textContent;
+                this.textContent = '✓ Disalin!';
+                this.style.color = '#43e97b';
+
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.color = '';
+                }, 1500);
             });
         });
-    }
 
-    /**
-     * Show loading state during page transitions
-     */
-    showLoading() {
-        const roomsGrid = document.querySelector('.row[class*="rooms-grid"]');
-        if (roomsGrid) {
-            roomsGrid.style.opacity = '0.5';
-            roomsGrid.style.transition = 'opacity 0.3s ease';
-
-            // Add loading spinner
-            const loadingSpinner = document.createElement('div');
-            loadingSpinner.className = 'rooms-loading-spinner';
-            loadingSpinner.innerHTML = `
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            `;
-            loadingSpinner.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 1000;
-            `;
-
-            roomsGrid.style.position = 'relative';
-            roomsGrid.appendChild(loadingSpinner);
-        }
-    }
-
-    /**
-     * Hide loading state
-     */
-    hideLoading() {
-        const roomsGrid = document.querySelector('.row[class*="rooms-grid"]');
-        if (roomsGrid) {
-            roomsGrid.style.opacity = '1';
-            const spinner = roomsGrid.querySelector('.rooms-loading-spinner');
-            if (spinner) {
-                spinner.remove();
-            }
-        }
-    }
-
-    /**
-     * Setup pagination click events
-     */
-    setupPaginationEvents() {
-        const paginationLinks = document.querySelectorAll('.pagination-staff a');
-
-        paginationLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                this.showLoading();
-            });
-        });
-    }
-}
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const roomsIndex = new StaffRoomsIndex();
-
-    // Setup pagination events
-    roomsIndex.setupPaginationEvents();
-
-    // Add CSS for loading spinner
-    const style = document.createElement('style');
-    style.textContent = `
-        .rooms-loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-        }
-
-        .card-hovered {
-            box-shadow: 0 8px 25px rgba(105, 108, 255, 0.15) !important;
-            border-color: #696cff !important;
-        }
-
-        .room-card-staff .card-body {
-            transition: background-color 0.2s ease;
-        }
-
-        .room-card-staff:hover .card-body {
-            background-color: #f8fafc;
-        }
-    `;
-    document.head.appendChild(style);
+        title.style.cursor = 'pointer';
+        title.title = 'Double click to copy room name';
+    });
 });
 
-// Handle page transitions
-document.addEventListener('readystatechange', () => {
-    if (document.readyState === 'complete') {
-        const roomsIndex = new StaffRoomsIndex();
-        roomsIndex.hideLoading();
+// Fitur dark mode toggle (opsional)
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+
+    // Simpan preference ke localStorage
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
+}
+
+// Cek preferensi dark mode saat load
+window.addEventListener('load', function() {
+    const darkModePreference = localStorage.getItem('darkMode');
+    if (darkModePreference === 'true') {
+        document.body.classList.add('dark-mode');
     }
 });

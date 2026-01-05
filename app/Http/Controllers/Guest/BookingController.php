@@ -85,12 +85,15 @@ class BookingController extends Controller
 
     public function create(Request $request)
     {
+        // Ambil semua rooms yang tersedia
         $rooms = Room::where('status', 'tersedia')
             ->with('building')
             ->get();
 
         $room = null;
-        if ($request->has('room')) {
+
+        // Jika ada parameter room di URL
+        if ($request->has('room') && $request->room) {
             $room = Room::with('building')->find($request->room);
         }
 
@@ -120,7 +123,7 @@ class BookingController extends Controller
             ])->withInput();
         }
 
-        // Cek ketersediaan (sederhana)
+        // Cek ketersediaan
         $conflict = Booking::where('room_id', $request->room_id)
             ->where('status', 'approved')
             ->where(function($q) use ($request) {

@@ -99,6 +99,12 @@ class BuildingController extends Controller
 
     public function destroy(Building $building)
     {
+        // Cek apakah ada room di building ini
+        if ($building->rooms()->count() > 0) {
+            return redirect()->route('admin.buildings.index')
+                ->with('error', 'Tidak bisa menghapus gedung karena masih memiliki ruangan.');
+        }
+
         if ($building->gambar) {
             Storage::disk('public')->delete($building->gambar);
         }

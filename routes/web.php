@@ -115,12 +115,6 @@ Route::middleware('auth')->group(function () {
             // Staff Management (CRUD)
             Route::resource('users', AdminUserController::class);
 
-            // Staff Features (Performance, Attendance)
-            Route::get('staff/performance', [AdminStaffController::class, 'performance'])
-                ->name('staff.performance');
-            Route::get('staff/attendance', [AdminStaffController::class, 'attendance'])
-                ->name('staff.attendance');
-
             // Master Data
             Route::resource('rooms', AdminRoomController::class);
             Route::resource('facilities', AdminFacilityController::class);
@@ -156,10 +150,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/remove-photo', [StaffProfileController::class, 'removePhoto'])
                 ->name('remove-photo'); // NAMA ROUTE DIPERBAIKI
         });
-
-            // Rooms (View only)
-            Route::get('/rooms', [StaffRoomController::class, 'index'])->name('rooms.index');
-            Route::get('/rooms/{room}', [StaffRoomController::class, 'show'])->name('rooms.show');
 
             // Bookings (Approve/Reject only)
             Route::get('/bookings', [StaffBookingController::class, 'index'])->name('bookings.index');

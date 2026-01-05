@@ -2,6 +2,23 @@
 @section('title', 'Room')
 @section('content')
 <div class="card">
+    <!-- Alert untuk Success/Error -->
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
+        <i class="bx bx-check-circle me-2"></i>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+        <i class="bx bx-error-circle me-2"></i>
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <h5 class="card-header d-flex justify-content-between align-items-center">
         <span>Daftar Ruangan</span>
 
@@ -94,14 +111,6 @@
             @endphp
             {{ (request('search') || request('status')) ? 'dan' : '' }} di gedung "<strong>{{ $selectedBuilding->nama_gedung ?? '' }}</strong>"
         @endif
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
-        <i class="bx bx-check-circle me-2"></i>
-        {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
