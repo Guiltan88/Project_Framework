@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('Layouts.app')
 @section('title', 'Booking Details - ' . $booking->kode_booking)
 
 @section('content')
